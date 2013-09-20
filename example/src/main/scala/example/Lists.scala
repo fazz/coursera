@@ -24,7 +24,9 @@ object Lists {
    * @return The sum of all elements in `xs`
    */
   def sum(xs: List[Int]): Int =
-    if (xs.tail.isEmpty) {
+    if (xs.isEmpty) {
+      0
+    } else if (xs.tail.isEmpty) {
     	xs(0)
     } else {
     	xs.head + sum(xs.tail)
@@ -44,7 +46,9 @@ object Lists {
    * @throws java.util.NoSuchElementException if `xs` is an empty list
    */
   def max(xs: List[Int]): Int = 
-    if (xs.tail.isEmpty) {
+    if (xs.isEmpty) {
+      throw new java.util.NoSuchElementException
+    } else if (xs.tail.isEmpty) {
       xs(0)
     } else {
       val z = max(xs.tail)

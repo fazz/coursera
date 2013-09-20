@@ -114,11 +114,21 @@ class ListsSuite extends FunSuite {
    * however it is recommended to write an individual `test` statement for
    * every tested aspect of a method.
    */
+  test("sum of empty") {
+    assert(sum(List()) === 0)
+  }
+
   test("sum of a few numbers") {
     assert(sum(List(1,2,0)) === 3)
   }
   
   test("max of a few numbers") {
     assert(max(List(3, 7, 2)) === 7)
+  }
+  test ("max of empty") {
+	  intercept[NoSuchElementException] {
+    max(List())
+  }
+    
   }
 }
