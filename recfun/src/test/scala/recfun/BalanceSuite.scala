@@ -11,6 +11,8 @@ class BalanceSuite extends FunSuite {
 
   test("()") {
 	  assert(balance("()".toList))
+	  assert(balance("".toList))
+	  assert(balance("szadfswdfs".toList))
   }
   test("(()())") {
 	  assert(balance("(()())".toList))
