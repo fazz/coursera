@@ -13,9 +13,11 @@ class TweetSetSuite extends FunSuite {
     val set3 = set2.incl(new Tweet("b", "b body", 20))
     val c = new Tweet("c", "c body", 7)
     val d = new Tweet("d", "d body", 9)
+    val e = new Tweet("e", "e body", 30)
     val set4c = set3.incl(c)
     val set4d = set3.incl(d)
     val set5 = set4c.incl(d)
+    val set6 = set5.incl(e)
   }
 
   def asSet(tweets: TweetSet): Set[Tweet] = {
@@ -23,12 +25,60 @@ class TweetSetSuite extends FunSuite {
     tweets.foreach(res += _)
     res
   }
+  def asSet(tweets: TweetList): Set[Tweet] = {
+    var res = Set[Tweet]()
+    tweets.foreach(res += _)
+    res
+  }
 
-  def size(set: TweetSet): Int = asSet(set).size
+  def size(set: TweetSet): Int = {
+    var res: Int = 0
+    set.foreach((t: Tweet) => res += 1)
+    res
+  }
+  def size(set: TweetList): Int = {
+    var res: Int = 0
+    set.foreach((t: Tweet) => res += 1)
+    res
+  }
 
+  test("filter and trending") {
+    new TestSets {
+      val fset1 = new Empty
+      val fset11 = fset1.incl(new Tweet("a", "ipad galaxy", 321))
+      val fset12 = fset11.incl(new Tweet("b", "galaxy", 205))
+
+      val fset2 = new Empty
+      val fset21 = fset2.incl(new Tweet("a", "ipad galaxy", 321))
+      val fset22 = fset21.incl(new Tweet("a", "iphone", 1))
+     
+      val fsetin = fset12 union fset22
+      
+      val data = new GoogleVsApple2(fsetin)
+
+      data.googleTweets.descendingByRetweet foreach println
+
+      assert(size(data.googleTweets) === 2)
+      assert(data.googleTweets.mostRetweeted.retweets == 321)
+      
+      assert(size(data.appleTweets) === 2)
+      assert(data.appleTweets.mostRetweeted.retweets == 321)
+      
+      assert(data.trending.head.retweets === 321)
+      assert(size(data.trending) === 3)
+    }
+  }
+  
   test("filter: on empty set") {
     new TestSets {
       assert(size(set1.filter(tw => tw.user == "a")) === 0)
+    }
+  }
+
+  test("filterAcc") {
+    new TestSets {
+      assert(size(set1.filterAcc(tw => tw.user == "a", new Empty)) === 0)
+      assert(size(set5.filterAcc(tw => tw.user == "a", new Empty)) === 1)
     }
   }
 
@@ -59,6 +109,17 @@ class TweetSetSuite extends FunSuite {
   test("union: with empty set (2)") {
     new TestSets {
       assert(size(set1.union(set5)) === 4)
+    }
+  }
+
+  test("mostretweeted") {
+    new TestSets {
+      val most = set5.mostRetweeted
+      assert(most.user == "a" || most.user == "b")
+    }
+    new TestSets {
+      val most = set6.mostRetweeted
+      assert(most.user == "e")
     }
   }
 
