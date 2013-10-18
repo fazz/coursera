@@ -14,6 +14,20 @@ class HuffmanSuite extends FunSuite {
     val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
   }
 
+  test("times") {
+    new TestTrees {
+      {
+      val list = Huffman.string2Chars("aa")
+      val c = Huffman.times(list)
+      assert(c == List(('a', 2)))
+      }
+      {
+      val list = Huffman.string2Chars("babacZ")
+      val c = Huffman.times(list)
+      assert(c == ('c', 1) :: ('b', 2) :: ('a', 2) :: ('Z', 1) :: Nil)
+      }
+    }
+  }
   test("weight of a larger tree") {
     new TestTrees {
       assert(weight(t1) === 5)
@@ -39,8 +53,20 @@ class HuffmanSuite extends FunSuite {
     assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
   }
 
+  test("decode") {
+    val tree = Fork(Leaf('a',1), Leaf('b', 2), 'a' :: 'b' :: Nil, 3)
+    val r = decode(tree, 0 :: 0 :: 1 :: Nil)
+    println (r)
+  }
+
+  test("decode secret") {
+    new TestTrees {
+      println(Huffman.decodedSecret)
+    }
+  }
   test("decode and encode a very short text should be identity") {
     new TestTrees {
+      println(encode(t1)("ab".toList))
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
