@@ -64,9 +64,22 @@ class HuffmanSuite extends FunSuite {
       println(Huffman.decodedSecret)
     }
   }
+
+  test("full cycle") {
+	  val tree = createCodeTree("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbc".toList)
+	  val bits = encode(tree)("bbbc".toList)
+	  val bits2 = quickEncode(tree)("bbbc".toList)
+	  println(bits)
+	  assert (bits == 0 :: 1 :: 0 :: 1 :: 0 :: 1 :: 0 :: 0 :: Nil)
+	  assert (bits2 == 0 :: 1 :: 0 :: 1 :: 0 :: 1 :: 0 :: 0 :: Nil)
+	  
+	  val dr = decode(tree, bits)
+	  assert (dr == "bbbc".toList)
+  }
+
+  
   test("decode and encode a very short text should be identity") {
     new TestTrees {
-      println(encode(t1)("ab".toList))
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
