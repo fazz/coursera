@@ -46,7 +46,7 @@ class BloxorzSuite extends FunSuite {
     val level =
     """ooo-------
       |oS--------
-      |ooo-------
+      |oo--------
       |-ooooooooo
       |--T--ooooo
       |------ooo-""".stripMargin
