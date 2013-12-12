@@ -2,43 +2,27 @@
 
 from copy import copy
 
-def q1(lines):
+def schedule(lines, key):
     w = []
     for l in lines:
-        w.append((l[0]-l[1], l[0], l[1]))
+        w.append((key(l[0],l[1]), l[0], l[1]))
     w.sort(key=lambda x: (x[0], x[1]), reverse=True)
 
-    print w
-    sumlen=[]
-    s = 0
-    for x in w:
-        s += x[2]
-        sumlen.append((s, x[1]))
+    def l(acc,x):
+        acc[1].append((acc[0]+x[2], x[1]))
+        return (acc[0]+x[2], acc[1])
+    (s, sumlen) = reduce(l, w, (0, [0]))
+    return reduce(lambda acc, x: acc + x[0]*x[1], sumlen[1:], 0)
 
-    return reduce(lambda acc, x: acc + x[0]*x[1], sumlen, 0)
+def q1(lines):
+    return schedule(lines=lines, key = lambda x,y: x-y)
 
 def q2(lines):
-    w = []
-    for l in lines:
-        w.append((l[0]*1.0/l[1], l[0], l[1]))
-    w.sort(key=lambda x: x[0], reverse=True)
-
-#    print w
-    sumlen=[]
-    s = 0
-    for x in w:
-        s += x[2]
-        sumlen.append((s, x[1]))
-
-    return reduce(lambda acc, x: acc + x[0]*x[1], sumlen, 0)
-
+    return schedule(lines=lines, key = lambda x,y: x*1.0/y)
 
 i = open("jobs.txt", "r")
 
 lines = [map(int, l.splitlines()[0].split(' ')) for l in i][1:]
-
-#lines = [(10,2),(4,5),(1,2),(2,3)]
-#lines = [(5,3), (2,1)]
 
 print "Q1: " + str(q1(copy(lines)))
 
