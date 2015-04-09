@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from copy import copy
 
@@ -24,7 +24,7 @@ i = open("jobs.txt", "r")
 
 lines = [map(int, l.splitlines()[0].split(' ')) for l in i][1:]
 
-print "Q1: " + str(q1(copy(lines)))
+print( "Q1: " + str(q1(copy(lines))))
 
-print "Q2: " + str(q2(copy(lines)))
+print( "Q2: " + str(q2(copy(lines))))
 
