@@ -34,7 +34,7 @@ def prepare_uf(values):
     for v in values:
         clusters[v] = [v]
         cluster_memberships[v] = v
-    cluster_count = len(values)
+    cluster_count = len(clusters)
 
 def join_uf(value1, value2):
     global cluster_count
@@ -82,6 +82,7 @@ with open(filename, "r") as input:
 
 lines.sort()
 prepare_uf(lines)
+print(cluster_count)
 
 
 # 1-bit diff
@@ -100,7 +101,7 @@ print(cluster_count)
 
 for vertex in lines:
     for b1 in range(1, bits):
-        for b2 in range(0, b1-1):
+        for b2 in range(0, b1):
             mask = (1<<b1) + (1<<b2)
             close_vertex = vertex^mask
             if close_vertex<vertex:
